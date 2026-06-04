@@ -1,17 +1,8 @@
 # shodan-fetch
 
-Authenticated Shodan scraper that harvests the web UI through a real logged-in browser session instead of the API. Returns the same per-host data and facets the API would, without spending API query credits or a token.
+Authenticated Shodan scraper that harvests the web UI through a persistent logged-in browser, returning per-host records and facet distributions without spending API query credits.
 
-## How it works
-
-The method, in four parts:
-
-1. **One authenticated browser.** A persistent Chrome profile holds a real logged-in Shodan session (cookies), reused across every run. Not a token, not a frozen snapshot — a durable browser login, the way a human stays signed in. `--login` opens it once; it persists.
-2. **Assets stripped.** The harvest uses `fetch()`, which pulls only the search HTML. Images / CSS / fonts / the map widget are never requested, so each query is a single small round-trip instead of a 5-10s full page load.
-3. **Everything in parallel.** All queries — and all pages of each query — fire at once via `Promise.all` inside the page context, where the session cookie rides automatically (`credentials: 'include'`).
-4. **Parse the SSR HTML.** Shodan renders every result card, facet, and the country breakdown server-side, so the one HTML response *is* the data. There is no hidden API (verified at the DevTools network layer: zero XHR/fetch to shodan.io on a live search).
-
-Net effect: a batch of queries returns full host records in ~1-1.5s, authenticated by the session cookie alone.
+It runs a real Chrome profile with a durable session cookie, then calls `fetch()` from inside that page context so every query rides the session automatically. Shodan renders all result cards, facet sidebars, and country breakdowns server-side, so one HTML response per page is the full dataset. Images, fonts, and the map widget are blocked context-wide, so each round-trip is fast. All queries and all pages of each query fire in parallel via `Promise.all`. Three modes share the same authenticated session: a default search mode that auto-paginates and returns structured host records, a facet mode that returns full field distributions across any of Shodan's ~91 facet fields, and a host mode that returns a full per-IP dossier.
 
 ## Install
 
@@ -20,119 +11,130 @@ pip install playwright
 playwright install chromium
 ```
 
+Python 3.10+. `playwright` is the only dependency.
+
 ## Usage
 
-**Once — log in:**
+**Log in once:**
+
 ```bash
-python shodan-fetch.py --login
-```
-A browser window opens. Log in to your Shodan account, then press Enter in the terminal. The login persists in a Chrome profile at `~/.config/shodan-fetch/profile` and is reused by every later run. Re-run `--login` if the session ever expires (the tool tells you when it does — it fails loud, never returns a silent empty result).
-
-**Run queries:**
-```bash
-# single query — auto-paginates all results, outputs rich JSON
-python shodan-fetch.py 'http.title:"Ollama"'
-
-# multiple queries from a file (one dork per line, # = comment)
-python shodan-fetch.py --file dorks.txt
-
-# cap pages per query (default: all, hard cap 100 pages = ~1000 hosts)
-python shodan-fetch.py --max-pages 5 'http.title:"MLflow"'
-
-# flat IP list for piping
-python shodan-fetch.py --ips-only 'http.title:"Langfuse"'
-
-# write IPs to file
-python shodan-fetch.py --file dorks.txt --output ips.txt
+python3 shodan-fetch.py --login
 ```
 
-**Pipe to other tools:**
-```bash
-# feed jaxen (JAXEN recon platform)
-python shodan-fetch.py --ips-only 'http.title:"Weaviate"' | jaxen import --no-lookup
+A browser window opens. Log in to your Shodan account, then press Enter in the terminal. The session persists in a Chrome profile at `~/.config/shodan-fetch/profile` and is reused on every later run. Re-run `--login` if the session expires; the tool fails loud and never returns a silent empty result.
 
-# feed aimap
-python shodan-fetch.py --ips-only 'http.title:"Ollama"' --output ips.txt && aimap -iL ips.txt
+**Search mode (default):**
+
+```bash
+python3 shodan-fetch.py 'http.title:"MLflow"'               # single dork, auto-paginates
+python3 shodan-fetch.py --file dorks.txt                     # batch from file (# = comment)
+python3 shodan-fetch.py --file dorks.txt --max-pages 5       # cap pages per query
+python3 shodan-fetch.py 'http.title:"Weaviate"' --ips-only   # flat deduplicated IP list
+python3 shodan-fetch.py --file dorks.txt --output ips.txt    # write IPs to file
 ```
 
-## Facet analysis & host dossiers
+**Facet mode:**
 
-Two more modes ride the same authenticated session, both reading Shodan's
-server-rendered pages with no API credits:
-
-**`--facet <fields>`** — population analytics. Returns the full distribution of a
-query across any Shodan facet field (`vuln`, `http.status`, `tag`, `ssl.version`,
-`ssl.cert.issuer.cn`, the pivot hashes, data-layer keys, and ~85 more). All
-fields fire in one parallel batch, for every query given.
 ```bash
-# CVE, HTTP-status and tag distribution across the whole population
-python shodan-fetch.py 'http.title:"Label Studio"' --facet vuln,http.status,tag
-```
-`http.status` and `vuln` turn a raw hit count into a real one: how many of the
-population actually return 200 vs 500, and which CVEs they carry, before probing
-a single host.
-
-**`--host <ips>`** — full per-IP dossier. Every open port (banner + crawl
-timestamp), the web-technology fingerprint, tags, CVEs, the General Information
-block, plus the `/raw` and `/history` URLs. IPs are fetched in parallel batches.
-```bash
-python shodan-fetch.py --host 51.159.71.107,20.42.106.87
+python3 shodan-fetch.py 'http.title:"Label Studio"' --facet vuln,http.status,tag,ssl.version
 ```
 
-`--facet` and `--host` are mutually exclusive and do not take `--output` /
-`--ips-only` (both emit structured JSON to stdout).
+Returns the full distribution of the query across each requested field. All fields fire in one parallel batch, for each query given. `--facet` and `--host` are mutually exclusive; neither takes `--output` or `--ips-only`.
+
+**Host mode:**
+
+```bash
+python3 shodan-fetch.py --host 51.159.71.107,20.42.106.87
+```
+
+Returns a full per-IP dossier: every open port with banner, web technology fingerprint, CVEs, tags, and the `/raw` and `/history` URLs. IPs are fetched in parallel batches of 20.
+
+### All flags
+
+| Flag | Effect |
+|------|--------|
+| `--login` | Open browser, log in once; session persists |
+| `--file FILE`, `-f FILE` | File with one dork per line (`#` = comment) |
+| `--max-pages N` | Cap pages per query (default: 0 = all; hard cap 100 pages) |
+| `--batch-size N` | Queries per parallel batch (default: 20) |
+| `--ips-only` | Output flat deduplicated IP list, one per line |
+| `--output FILE`, `-o FILE` | Write IPs to file (implies `--ips-only`) |
+| `--facet FIELDS` | Comma-separated facet fields for population analytics |
+| `--host IPS` | Comma-separated IPs for full per-IP dossier |
 
 ## Output format
 
-Default JSON: one object per query, each with the total count, the per-query facets, the full country breakdown, and a `hosts` array of full records:
+Default search mode emits JSON, one object per query:
 
 ```json
 [
   {
     "query": "http.title:\"Ollama\"",
     "count": "80,157",
-    "countries": { "US": 4254, "CN": 3210, "DE": 2751 },
+    "countries": {"US": 4254, "CN": 3210, "DE": 2751},
     "facets": {
-      "Top Ports": [{ "label": "443", "count": "8,294" }],
-      "Top Organizations": [{ "label": "Hetzner Online GmbH", "count": "1,450" }]
+      "Top Ports": [{"label": "443", "count": "8,294"}],
+      "Top Organizations": [{"label": "Hetzner Online GmbH", "count": "1,450"}]
     },
     "hosts": [
       {
-        "ip": "1.2.3.4", "port": 443,
+        "ip": "192.0.2.1",
+        "port": 443,
         "hostnames": ["host.example.com"],
-        "org": "Example Inc", "country": "United States", "city": "Dublin",
+        "org": "Example Inc",
+        "country": "United States",
+        "city": "Dublin",
         "timestamp": "2026-06-01T06:02:31",
         "banner": "HTTP/1.1 200 OK\nServer: nginx\n...",
-        "ssl": { "issuer_org": "...", "subject_cn": "...", "tls_versions": "..." },
-        "components": ["Nginx"], "tags": ["cloud"]
+        "ssl": {"issuer_org": "...", "subject_cn": "...", "tls_versions": "..."},
+        "components": ["Nginx"],
+        "tags": ["cloud"]
       }
     ]
   }
 ]
 ```
 
-`--ips-only` outputs one IP per line, deduplicated across all queries.
+The sidebar facets in `facets` cover: Top Countries, Top Ports, Top Organizations, Top Products, Top Operating Systems. These are always returned for search mode and do not require `--facet`.
 
-## Dorks file format
+Facet mode emits a per-query, per-field structure with `value` and `count` pairs, covering any of Shodan's ~91 fields including `vuln`, `http.status`, `tag`, `ssl.version`, `ssl.cert.issuer.cn`, and the pivot hashes.
+
+Host mode emits per-IP objects with `ip`, `tags`, `webtech`, `vulns`, `general` (general information block), `services` (port, transport, heading), `banners`, `raw_url`, and `history_url`.
+
+`--ips-only` emits one IP per line, deduplicated across all queries.
+
+## Example
 
 ```
-# vector databases
-http.title:"Qdrant"
-http.title:"Weaviate"
-http.title:"Milvus"
+$ python3 shodan-fetch.py 'http.title:"Ollama"' --max-pages 1 --ips-only
+[*]   80,157  (1 pages)  http.title:"Ollama"
+192.0.2.10
+192.0.2.11
+198.51.100.4
+```
 
-# LLM inference
-http.title:"Ollama"
-http.title:"Open WebUI"
+Shodan caps pagination at 100 pages (~1,000 unique hosts per query, often fewer after cross-port dedup). The reported `count` is the full population; the `hosts` array is what is retrievable through the web UI.
+
+## Pipe to other tools
+
+```bash
+# feed jaxen
+python3 shodan-fetch.py --ips-only 'http.title:"Weaviate"' | jaxen import --no-lookup
+
+# feed aimap
+python3 shodan-fetch.py --ips-only 'http.title:"Ollama"' --output ips.txt && aimap -iL ips.txt
 ```
 
 ## Notes
 
-- Use `http.title:` and similar SSR-rendered queries. `product:` filter dorks are JS-rendered and return no results via this method.
-- Shodan's web UI shows 10 results per page and caps pagination at 100 pages (~1000 unique hosts per query, often fewer after cross-port dedup). The reported `count` is the full population; the `hosts` array is what is retrievable through the UI.
+- `http.title:` and similar SSR-rendered filters work. `product:` dorks are JS-rendered and return no results via this method.
 - The Chrome profile holds your Shodan auth cookies. Keep `~/.config/shodan-fetch/` out of version control.
-- Upgrading from an older version that used `session.json`? It is imported into the new persistent profile automatically on first run.
+- Upgrading from an older version that used `session.json`? It is imported into the persistent profile automatically on first run.
 
-## Integration with JAXEN
+## What shodan-fetch is not
 
-[JAXEN](https://github.com/nuclide-research/JAXEN) integrates shodan-fetch natively via `jaxen hunt --web`.
+shodan-fetch is not a Shodan API client. It does not call `api.shodan.io`. It does not use API query credits. It reads the same server-rendered HTML a logged-in browser would read, using the session cookie to authenticate. Results are bounded by the web UI pagination cap, not the API.
+
+## License
+
+MIT. Part of the NuClide toolchain. Contact: [nuclide-research.com](https://nuclide-research.com)
