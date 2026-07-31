@@ -1,0 +1,20 @@
+
+; <<>> DiG 9.18.39-0ubuntu0.24.04.5-Ubuntu <<>> -x 18.176.25.64
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12170
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;64.25.176.18.in-addr.arpa.	IN	PTR
+
+;; ANSWER SECTION:
+64.25.176.18.in-addr.arpa. 300	IN	PTR	ec2-18-176-25-64.ap-northeast-1.compute.amazonaws.com.
+
+;; Query time: 361 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Mon Jun 29 00:41:04 CDT 2026
+;; MSG SIZE  rcvd: 121
+

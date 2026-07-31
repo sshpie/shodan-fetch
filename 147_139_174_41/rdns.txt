@@ -1,0 +1,20 @@
+
+; <<>> DiG 9.18.39-0ubuntu0.24.04.5-Ubuntu <<>> -x 147.139.174.41
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 41010
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;41.174.139.147.in-addr.arpa.	IN	PTR
+
+;; AUTHORITY SECTION:
+139.147.in-addr.arpa.	300	IN	SOA	rdns1.alidns.com. dnsmgr.alibaba-inc.com. 2015011409 1800 600 1814400 300
+
+;; Query time: 1980 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Mon Jun 29 00:39:36 CDT 2026
+;; MSG SIZE  rcvd: 127
+

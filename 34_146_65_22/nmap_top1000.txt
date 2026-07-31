@@ -1,0 +1,13 @@
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-06-29 00:39 -0500
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 34.146.65.22, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:61418 > 34.146.65.22:53 S ttl=58 id=5493 iplen=44  seq=1296123858 win=1024 <mss 1460>
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 34.146.65.22, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:61420 > 34.146.65.22:53 S ttl=46 id=53491 iplen=44  seq=1296254928 win=1024 <mss 1460>
+Nmap scan report for 34.146.65.22
+Host is up (0.20s latency).
+Not shown: 999 filtered tcp ports (no-response)
+PORT     STATE SERVICE VERSION
+5000/tcp open  http    Gunicorn 19.7.1
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 13.54 seconds

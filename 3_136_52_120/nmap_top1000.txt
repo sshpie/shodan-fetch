@@ -1,0 +1,13 @@
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-06-29 00:38 -0500
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 3.136.52.120, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:52903 > 3.136.52.120:53 S ttl=47 id=25213 iplen=44  seq=1440275836 win=1024 <mss 1460>
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 3.136.52.120, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:52905 > 3.136.52.120:53 S ttl=44 id=28355 iplen=44  seq=1440406910 win=1024 <mss 1460>
+Nmap scan report for ec2-3-136-52-120.us-east-2.compute.amazonaws.com (3.136.52.120)
+Host is up (0.11s latency).
+Not shown: 999 filtered tcp ports (no-response)
+PORT   STATE SERVICE VERSION
+80/tcp open  http    nginx
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.19 seconds

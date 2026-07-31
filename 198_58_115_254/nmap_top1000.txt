@@ -1,0 +1,17 @@
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-06-29 00:34 -0500
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 198.58.115.254, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:42284 > 198.58.115.254:53 S ttl=49 id=27538 iplen=44  seq=180065895 win=1024 <mss 1460>
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 198.58.115.254, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:42286 > 198.58.115.254:53 S ttl=44 id=30806 iplen=44  seq=179934821 win=1024 <mss 1460>
+Nmap scan report for 198-58-115-254.ip.linodeusercontent.com (198.58.115.254)
+Host is up (0.093s latency).
+Not shown: 996 filtered tcp ports (no-response)
+PORT     STATE SERVICE   VERSION
+22/tcp   open  ssh       OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 (Ubuntu Linux; protocol 2.0)
+80/tcp   open  http      nginx
+443/tcp  open  ssl/https nginx
+3000/tcp open  http      Jetty 9.4.48.v20220622
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 16.12 seconds

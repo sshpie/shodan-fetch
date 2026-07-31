@@ -1,0 +1,131 @@
+% This is the RIPE Database query service.
+% The objects are in RPSL format.
+%
+% The RIPE Database is subject to Terms and Conditions.
+% See https://docs.db.ripe.net/terms-conditions.html
+
+% Note: this output has been filtered.
+%       To receive output for a database update, use the "-B" flag.
+
+% Information related to '141.98.199.0 - 141.98.199.255'
+
+% Abuse contact for '141.98.199.0 - 141.98.199.255' is 'abuse@greenserver.io'
+
+inetnum:        141.98.199.0 - 141.98.199.255
+netname:        GREENCLOUD-SG
+descr:          365 Group LLC
+country:        SG
+org:            ORG-OTJS2-RIPE
+admin-c:        DN4353-RIPE
+tech-c:         DN4353-RIPE
+status:         ASSIGNED PA
+mnt-by:         xtom
+mnt-by:         mnt-vn-365online-1
+mnt-routes:     mnt-vn-365online-1
+mnt-domains:    mnt-vn-365online-1
+created:        2025-03-20T09:52:22Z
+last-modified:  2025-04-02T08:04:53Z
+source:         RIPE
+
+organisation:   ORG-OTJS2-RIPE
+org-name:       Greencloud LLC
+country:        VN
+reg-nr:         0109492303
+org-type:       LIR
+address:        HD09-SP.BH-10, Duong Bien Ho, KDT Vinhomes Ocean Park,
+                Xa Da Ton, Huyen Gia Lam
+address:
+address:        Hanoi
+address:        VIET NAM
+phone:          +19095473866
+admin-c:        DN4353-RIPE
+tech-c:         DN4353-RIPE
+abuse-c:        AR60478-RIPE
+mnt-ref:        mnt-vn-365online-1
+mnt-ref:        xtom
+mnt-ref:        XSWL-MNT
+mnt-by:         RIPE-NCC-HM-MNT
+mnt-by:         mnt-vn-365online-1
+created:        2020-06-11T07:48:00Z
+last-modified:  2026-05-13T07:26:34Z
+source:         RIPE # Filtered
+
+role:           Dzung Nguyen
+address:        16192 Coastal Highway Lewes
+address:        19958
+address:        DE
+address:        USA
+phone:          +19095473866
+nic-hdl:        DN4353-RIPE
+mnt-by:         mnt-vn-365online-1
+created:        2020-06-11T07:47:59Z
+last-modified:  2020-07-07T08:09:55Z
+source:         RIPE # Filtered
+abuse-mailbox:  abuse@greenserver.io
+
+% Information related to '141.98.199.0/24AS3214'
+
+route:          141.98.199.0/24
+origin:         AS3214
+mnt-by:         xtom
+created:        2024-12-23T14:30:16Z
+last-modified:  2024-12-23T14:30:16Z
+source:         RIPE
+
+% Information related to '141.98.199.0/24AS3258'
+
+route:          141.98.199.0/24
+origin:         AS3258
+mnt-by:         xtom
+created:        2024-12-23T14:30:16Z
+last-modified:  2024-12-23T14:30:16Z
+source:         RIPE
+
+% Information related to '141.98.199.0/24AS4785'
+
+route:          141.98.199.0/24
+origin:         AS4785
+mnt-by:         xtom
+created:        2024-12-23T14:30:17Z
+last-modified:  2024-12-23T14:30:17Z
+source:         RIPE
+
+% Information related to '141.98.199.0/24AS6233'
+
+route:          141.98.199.0/24
+origin:         AS6233
+mnt-by:         xtom
+created:        2024-12-23T14:30:17Z
+last-modified:  2024-12-23T14:30:17Z
+source:         RIPE
+
+% Information related to '141.98.199.0/24AS8888'
+
+route:          141.98.199.0/24
+origin:         AS8888
+mnt-by:         xtom
+created:        2024-12-23T14:30:17Z
+last-modified:  2024-12-23T14:30:17Z
+source:         RIPE
+
+% Information related to '141.98.199.0/24AS9312'
+
+route:          141.98.199.0/24
+origin:         AS9312
+mnt-by:         xtom
+created:        2024-12-23T14:30:17Z
+last-modified:  2024-12-23T14:30:17Z
+source:         RIPE
+
+% Information related to '141.98.199.0/24AS949'
+
+route:          141.98.199.0/24
+origin:         AS949
+mnt-by:         xtom
+created:        2024-12-23T14:30:16Z
+last-modified:  2024-12-23T14:30:16Z
+source:         RIPE
+
+% This query was served by the RIPE Database Query Service version 1.122.1 (BUSA)
+
+

@@ -1,0 +1,58 @@
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-06-29 00:36 -0500
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 141.98.199.66, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:58429 > 141.98.199.66:53 S ttl=50 id=61576 iplen=44  seq=1857565278 win=1024 <mss 1460>
+sendto in send_ip_packet_sd: sendto(4, packet, 44, 0, 141.98.199.66, 16) => Operation not permitted
+Offending packet: TCP 10.170.23.90:58431 > 141.98.199.66:53 S ttl=51 id=35422 iplen=44  seq=1857696348 win=1024 <mss 1460>
+Nmap scan report for 141.98.199.66
+Host is up (0.21s latency).
+Not shown: 995 filtered tcp ports (no-response)
+PORT     STATE  SERVICE     VERSION
+22/tcp   open   ssh         OpenSSH 9.6p1 Ubuntu 3ubuntu13.16 (Ubuntu Linux; protocol 2.0)
+80/tcp   closed http
+443/tcp  closed https
+5000/tcp open   http        Gunicorn 20.0.4
+9000/tcp open   cslistener?
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port9000-TCP:V=7.98%I=7%D=6/29%Time=6A42044E%P=x86_64-pc-linux-gnu%r(Ge
+SF:nericLines,3AC,"\x02e\0\0\0\rDB::ExceptionEDB::Exception:\x20Unexpected
+SF:\x20packet\x20from\x20client\x20\(expected\x20Hello,\x20got\x2013\)\xd0
+SF:\x060\.\x20DB::Exception::Exception\(DB::Exception::MessageMasked&&,\x2
+SF:0int,\x20bool\)\x20@\x200x00000000171c8f2a\n1\.\x20DB::Exception::Excep
+SF:tion\(String&&,\x20int,\x20String,\x20bool\)\x20@\x200x000000001050bfce
+SF:\n2\.\x20DB::Exception::Exception\(PreformattedMessage&&,\x20int\)\x20@
+SF:\x200x000000001050b844\n3\.\x20DB::Exception::Exception<unsigned\x20lon
+SF:g&>\(int,\x20FormatStringHelperImpl<std::type_identity<unsigned\x20long
+SF:&>::type>,\x20unsigned\x20long&\)\x20@\x200x0000000010dc2af6\n4\.\x20DB
+SF:::TCPHandler::receiveHello\(\)\x20@\x200x000000001d73769e\n5\.\x20DB::T
+SF:CPHandler::runImpl\(\)\x20@\x200x000000001d7256cb\n6\.\x20DB::TCPHandle
+SF:r::run\(\)\x20@\x200x000000001d74fc24\n7\.\x20Poco::Net::TCPServerConne
+SF:ction::start\(\)\x20@\x200x0000000022f6db87\n8\.\x20Poco::Net::TCPServe
+SF:rDispatcher::run\(\)\x20@\x200x0000000022f6e082\n9\.\x20Poco::PooledThr
+SF:ead::run\(\)\x20@\x200x0000000022f2fa1c\n10\.\x20Poco::ThreadImpl::runn
+SF:ableEntry\(void\*\)\x20@\x200x0000000022f2df0f\n11\.\x20\?\x20@\x200x00
+SF:0000000")%r(GetRequest,D7,"HTTP/1\.0\x20400\x20Bad\x20Request\r\n\r\nPo
+SF:rt\x209000\x20is\x20for\x20clickhouse-client\x20program\r\nYou\x20must\
+SF:x20use\x20port\x208123\x20for\x20HTTP\.\r\nYou\x20can\x20also\x20use\x2
+SF:0the\x20/play\x20endpoint\x20for\x20interactive\x20queries\r\nand\x20th
+SF:e\x20/dashboard\x20endpoint\x20for\x20the\x20Dashboard\.\r\n")%r(HTTPOp
+SF:tions,3AC,"\x02e\0\0\0\rDB::ExceptionEDB::Exception:\x20Unexpected\x20p
+SF:acket\x20from\x20client\x20\(expected\x20Hello,\x20got\x2079\)\xd0\x060
+SF:\.\x20DB::Exception::Exception\(DB::Exception::MessageMasked&&,\x20int,
+SF:\x20bool\)\x20@\x200x00000000171c8f2a\n1\.\x20DB::Exception::Exception\
+SF:(String&&,\x20int,\x20String,\x20bool\)\x20@\x200x000000001050bfce\n2\.
+SF:\x20DB::Exception::Exception\(PreformattedMessage&&,\x20int\)\x20@\x200
+SF:x000000001050b844\n3\.\x20DB::Exception::Exception<unsigned\x20long&>\(
+SF:int,\x20FormatStringHelperImpl<std::type_identity<unsigned\x20long&>::t
+SF:ype>,\x20unsigned\x20long&\)\x20@\x200x0000000010dc2af6\n4\.\x20DB::TCP
+SF:Handler::receiveHello\(\)\x20@\x200x000000001d73769e\n5\.\x20DB::TCPHan
+SF:dler::runImpl\(\)\x20@\x200x000000001d7256cb\n6\.\x20DB::TCPHandler::ru
+SF:n\(\)\x20@\x200x000000001d74fc24\n7\.\x20Poco::Net::TCPServerConnection
+SF:::start\(\)\x20@\x200x0000000022f6db87\n8\.\x20Poco::Net::TCPServerDisp
+SF:atcher::run\(\)\x20@\x200x0000000022f6e082\n9\.\x20Poco::PooledThread::
+SF:run\(\)\x20@\x200x0000000022f2fa1c\n10\.\x20Poco::ThreadImpl::runnableE
+SF:ntry\(void\*\)\x20@\x200x0000000022f2df0f\n11\.\x20\?\x20@\x200x0000000
+SF:00");
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 47.65 seconds

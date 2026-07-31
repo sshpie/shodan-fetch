@@ -42,6 +42,7 @@ Usage:
 import argparse
 import asyncio
 import json
+import os
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -105,7 +106,7 @@ async (queries) => {{
   {_EXTRACT_HOSTS}
   const responses = await Promise.all(
     queries.map(q =>
-      fetch(`https://www.shodan.io/search?query=${{q}}&page=1`, {{ credentials: 'include' }})
+      fetch(`https://www.shodan.io/search?query=${{q}}&page=1`, {{ credentials: 'include', headers: {{ 'Accept': 'text/html' }} }})
         .then(r => r.text())
     )
   );
@@ -149,7 +150,7 @@ async (args) => {{
   const {{ query, pages }} = args;
   const responses = await Promise.all(
     pages.map(p =>
-      fetch(`https://www.shodan.io/search?query=${{query}}&page=${{p}}`, {{ credentials: 'include' }})
+      fetch(`https://www.shodan.io/search?query=${{query}}&page=${{p}}`, {{ credentials: 'include', headers: {{ 'Accept': 'text/html' }} }})
         .then(r => r.text())
     )
   );
@@ -245,20 +246,123 @@ async (ips) => {
 
 
 async def login() -> None:
-    """Open the persistent profile headed so the user logs in once; the login
-    then lives in the profile and is reused by every subsequent run."""
+    """Open the persistent profile headed and wait until the Shodan session is
+    live, then persist + close automatically. Detection reuses the same signal
+    as _open_authed(): account.shodan.io stops redirecting to /login once you
+    are logged in. A dedicated background page does the polling so your login
+    form is never navigated out from under you, and bring_to_front() keeps the
+    login tab focused for typing.
+
+    No stdin / input(): the previous input()-based wait raised EOFError on any
+    non-TTY stdin (run via a pipe, the Bash tool, or a `!`-prefixed shell), which
+    unwound the async-with and closed the browser the instant it opened. This
+    version depends only on the browser, so --login works under every launch."""
     PROFILE_DIR.mkdir(parents=True, exist_ok=True)
     async with async_playwright() as p:
         ctx = await p.chromium.launch_persistent_context(str(PROFILE_DIR), headless=False)
         page = ctx.pages[0] if ctx.pages else await ctx.new_page()
         await page.goto("https://account.shodan.io/login")
-        print("Log in to Shodan in the browser window, then press Enter here...", flush=True)
-        input()
-        await ctx.close()
-    print(f"Login persisted -> {PROFILE_DIR}", file=sys.stderr)
+        print("Log in to Shodan in the browser window — use 'Login with Google' if "
+              "you like. Take your time: the window stays open and saves itself "
+              "once you're signed in (or close it to cancel).",
+              file=sys.stderr, flush=True)
+
+        # If the user closes the window, stop waiting instead of hanging forever.
+        closed = asyncio.Event()
+        ctx.on("close", lambda *_: closed.set())
+
+        # Watch ONLY the tab the user is driving — never navigate it, never open a
+        # second tab (that stole focus and felt like the window was misbehaving).
+        # We just notice when they land on an authenticated Shodan page. The OAuth
+        # detour through accounts.google.com is not a Shodan page, so it won't
+        # false-trigger; after login Shodan redirects back to account.shodan.io.
+        def is_authed_url(u: str) -> bool:
+            return (("account.shodan.io" in u or u.startswith("https://www.shodan.io"))
+                    and "/login" not in u and "/register" not in u)
+
+        authed = False
+        stable = 0
+        while not closed.is_set():
+            await asyncio.sleep(1.5)
+            try:
+                if page.is_closed():
+                    break
+                u = page.url
+            except Exception:
+                break
+            if is_authed_url(u):
+                stable += 1
+                if stable >= 2:   # two reads ~3s apart -> real, not a transient redirect
+                    authed = True
+                    break
+            else:
+                stable = 0
+        try:
+            await ctx.close()
+        except Exception:
+            pass
+
+    if authed:
+        print(f"Login persisted -> {PROFILE_DIR}", file=sys.stderr)
+    else:
+        print("Login not detected (window closed before a session was live). "
+              "Re-run: shodan-fetch --login", file=sys.stderr)
+        sys.exit(3)
 
 
-async def _open_authed(p, headless=True):
+async def _google_sso_reauth(page) -> bool:
+    """Re-establish the Shodan session through the Google login already saved in
+    the profile. Shodan's own `session` cookie is short-lived (~1 day); the
+    Google SSO session in the profile lasts ~a year. So when the Shodan session
+    lapses we just re-run the OIDC handoff — no password, no typing. With a
+    single signed-in Google account that has already authorised Shodan, Google
+    redirects straight back; if an account chooser or consent screen stalls, we
+    click the signed-in account (or the one named in SHODAN_FETCH_GOOGLE_EMAIL).
+
+    Returns True if we land back on Shodan authenticated, False otherwise.
+    This is cookie-based SSO, not a credential login, so Google's automation
+    block never trips (nothing is entered)."""
+    pref = os.environ.get("SHODAN_FETCH_GOOGLE_EMAIL", "").strip()
+    try:
+        await page.goto("https://account.shodan.io/login/google_oidc",
+                        wait_until="domcontentloaded")
+    except Exception:
+        return False
+    for _ in range(15):  # ~30s budget for the redirect chain
+        await asyncio.sleep(2)
+        url = page.url
+        if "account.shodan.io" in url and "/login" not in url:
+            return True
+        if "accounts.google.com" in url:
+            # Nudge a stalled chooser/consent: click the signed-in account tile
+            # (preferred email if set), else any "Continue/Confirm/Allow" button.
+            try:
+                await page.evaluate(
+                    """(pref) => {
+                      const tiles = [...document.querySelectorAll('[data-identifier]')];
+                      const pick = pref
+                        ? tiles.find(t => (t.getAttribute('data-identifier')||'') === pref)
+                        : tiles.find(t => !/signed out/i.test(t.textContent||'')) || tiles[0];
+                      const target = pick && (pick.closest('li,div[role=link],a,button') || pick);
+                      if (target) { target.click(); return; }
+                      const btn = [...document.querySelectorAll('button,div[role=button]')]
+                        .find(b => /continue|confirm|allow|next/i.test(b.textContent||''));
+                      if (btn) btn.click();
+                    }""",
+                    pref,
+                )
+            except Exception:
+                pass
+    # one last check after the loop
+    return "account.shodan.io" in page.url and "/login" not in page.url
+
+
+async def _open_authed(p, headless=None):
+    # Headed by default: Shodan's Cloudflare blocks headless chromium (returns the
+    # challenge page, so div.result never renders -> empty scrape). Override with
+    # SHODAN_FETCH_HEADLESS=1 only on a host where Cloudflare is not challenging.
+    if headless is None:
+        headless = os.environ.get("SHODAN_FETCH_HEADLESS", "0") == "1"
     """Open the persistent (logged-in) context and verify the session is live.
     One-time: if the profile is fresh but a legacy session.json snapshot exists,
     import its cookies so the upgrade from the old format is seamless."""
@@ -284,9 +388,17 @@ async def _open_authed(p, headless=True):
     # page exactly as a browser would (a blocked sub-resource can't relocate it).
     await page.goto("https://account.shodan.io/", wait_until="domcontentloaded")
     if "/login" in page.url:
-        print("Session expired or not logged in. Run: shodan-fetch --login", file=sys.stderr)
-        await ctx.close()
-        sys.exit(3)
+        # Shodan session lapsed. Before giving up, silently re-auth through the
+        # Google login that's still alive in the profile (no password, no typing).
+        print("[*] Shodan session expired; re-authing via saved Google login...",
+              file=sys.stderr)
+        if await _google_sso_reauth(page):
+            print("[*] session refreshed via Google SSO", file=sys.stderr)
+        else:
+            print("Session expired and auto Google re-auth failed. "
+                  "Run: shodan-fetch --login", file=sys.stderr)
+            await ctx.close()
+            sys.exit(3)
 
     # Now strip assets context-wide: every later navigation / page skips
     # images, CSS, fonts and media. The fetch() harvest never requests them anyway.
@@ -303,7 +415,7 @@ async def _session():
     """Open the authenticated context, warm up on www.shodan.io (so same-site
     session cookies ride the in-page fetches), yield (ctx, page), close on exit."""
     async with async_playwright() as p:
-        ctx, page = await _open_authed(p, headless=True)
+        ctx, page = await _open_authed(p)  # headed by default (Cloudflare)
         await page.goto("https://www.shodan.io", wait_until="domcontentloaded")
         try:
             yield ctx, page

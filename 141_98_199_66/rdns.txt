@@ -1,0 +1,20 @@
+
+; <<>> DiG 9.18.39-0ubuntu0.24.04.5-Ubuntu <<>> -x 141.98.199.66
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 45216
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;66.199.98.141.in-addr.arpa.	IN	PTR
+
+;; AUTHORITY SECTION:
+199.98.141.in-addr.arpa. 3600	IN	SOA	ns1.greencloudvps.com. ns.greencloudvps.com. 2025090300 28800 7200 604800 86400
+
+;; Query time: 1019 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Mon Jun 29 00:36:06 CDT 2026
+;; MSG SIZE  rcvd: 115
+

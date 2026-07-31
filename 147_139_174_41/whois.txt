@@ -1,0 +1,133 @@
+
+#
+# ARIN WHOIS data and services are subject to the Terms of Use
+# available at: https://www.arin.net/resources/registry/whois/tou/
+#
+# If you see inaccuracies in the results, please report at
+# https://www.arin.net/resources/registry/whois/inaccuracy_reporting/
+#
+# Copyright 1997-2026, American Registry for Internet Numbers, Ltd.
+#
+
+
+
+# start
+
+NetRange:       147.139.0.0 - 147.139.255.255
+CIDR:           147.139.0.0/16
+NetName:        AL-3
+NetHandle:      NET-147-139-0-0-1
+Parent:         NET147 (NET-147-0-0-0-0)
+NetType:        Direct Allocation
+OriginAS:       
+Organization:   Alibaba Cloud LLC (AL-3)
+RegDate:        2016-12-19
+Updated:        2017-04-26
+Ref:            https://rdap.arin.net/registry/ip/147.139.0.0
+
+
+
+OrgName:        Alibaba Cloud LLC
+OrgId:          AL-3
+Address:        400 S El Camino Real, Suite 400
+City:           San Mateo
+StateProv:      CA
+PostalCode:     94402
+Country:        US
+RegDate:        2010-10-29
+Updated:        2026-02-11
+Comment:        1.For AliCloud IPR Infringement and Abuse Claim, please use below link with browser to report: https://intl.aliyun.com/report
+Comment:        
+Comment:        2.For Alibaba.com and Aliexpress.com's IPR Infringement , please use below link with browser to report: https://ipp.alibabagroup.com
+Comment:        
+Comment:        3.For Alibaba.com and Aliexpress.com's Abuse, please send email to those two mail lists to report: intl-abuse@list.alibaba-inc.com and abuse@alibaba-inc.com
+Comment:        
+Comment:        4. For network issue, please send email to this mail list: aliops-goc@list.alibaba-inc.com
+Ref:            https://rdap.arin.net/registry/entity/AL-3
+
+
+OrgNOCHandle: ALIBA-ARIN
+OrgNOCName:   Alibaba NOC
+OrgNOCPhone:  +1-408-748-1200 
+OrgNOCEmail:  abuse@alibaba-inc.com
+OrgNOCRef:    https://rdap.arin.net/registry/entity/ALIBA-ARIN
+
+OrgTechHandle: ALIBA-ARIN
+OrgTechName:   Alibaba NOC
+OrgTechPhone:  +1-408-748-1200 
+OrgTechEmail:  abuse@alibaba-inc.com
+OrgTechRef:    https://rdap.arin.net/registry/entity/ALIBA-ARIN
+
+OrgAbuseHandle: NETWO4028-ARIN
+OrgAbuseName:   Network Abuse
+OrgAbusePhone:  +1-408-785-5580 
+OrgAbuseEmail:  abuse@alibaba-inc.com
+OrgAbuseRef:    https://rdap.arin.net/registry/entity/NETWO4028-ARIN
+
+# end
+
+
+# start
+
+NetRange:       147.139.128.0 - 147.139.255.255
+CIDR:           147.139.128.0/17
+NetName:        ALIBABA CLOUD - ID
+NetHandle:      NET-147-139-128-0-1
+Parent:         AL-3 (NET-147-139-0-0-1)
+NetType:        Reassigned
+OriginAS:       
+Customer:       Alibaba Cloud - ID (C07275027)
+RegDate:        2019-01-10
+Updated:        2024-09-03
+Comment:        	1.For AliCloud IPR Infringement and Abuse Claim, please use below link with browser to report: https://intl.aliyun.com/report
+Comment:        
+Comment:        2.For Alibaba.com and Aliexpress.com's IPR Infringement , please use below link with browser to report: https://ipp.alibabagroup.com
+Comment:        
+Comment:        3.For Alibaba.com and Aliexpress.com's Abuse, please send email to those two mail lists to report: intl-abuse@list.alibaba-inc.com and abuse@alibaba-inc.com
+Comment:        
+Comment:        4. For network issue, please send email to this mail list: aliops-goc@list.alibaba-inc.com
+Ref:            https://rdap.arin.net/registry/ip/147.139.128.0
+
+
+CustName:       Alibaba Cloud - ID
+Address:        CAPITAL PLACE BUILDING, 23rd Floor Jl. Jend. Gatot Subroto kav. 18, Jakarta 12710 INDONESIA
+City:           Jakarta
+StateProv:      
+PostalCode:     
+Country:        ID
+RegDate:        2019-01-10
+Updated:        2024-09-03
+Ref:            https://rdap.arin.net/registry/entity/C07275027
+
+OrgNOCHandle: ALIBA-ARIN
+OrgNOCName:   Alibaba NOC
+OrgNOCPhone:  +1-408-748-1200 
+OrgNOCEmail:  abuse@alibaba-inc.com
+OrgNOCRef:    https://rdap.arin.net/registry/entity/ALIBA-ARIN
+
+OrgTechHandle: ALIBA-ARIN
+OrgTechName:   Alibaba NOC
+OrgTechPhone:  +1-408-748-1200 
+OrgTechEmail:  abuse@alibaba-inc.com
+OrgTechRef:    https://rdap.arin.net/registry/entity/ALIBA-ARIN
+
+OrgAbuseHandle: NETWO4028-ARIN
+OrgAbuseName:   Network Abuse
+OrgAbusePhone:  +1-408-785-5580 
+OrgAbuseEmail:  abuse@alibaba-inc.com
+OrgAbuseRef:    https://rdap.arin.net/registry/entity/NETWO4028-ARIN
+
+# end
+
+
+
+#
+# ARIN WHOIS data and services are subject to the Terms of Use
+# available at: https://www.arin.net/resources/registry/whois/tou/
+#
+# If you see inaccuracies in the results, please report at
+# https://www.arin.net/resources/registry/whois/inaccuracy_reporting/
+#
+# Copyright 1997-2026, American Registry for Internet Numbers, Ltd.
+#
+
