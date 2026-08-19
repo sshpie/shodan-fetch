@@ -3,10 +3,10 @@
 <h4 align="center">Authenticated Shodan harvest through a persistent browser session, zero API credits.</h4>
 
 <p align="center">
-  <a href="https://github.com/zellkernel/shodan-fetch/blob/main/LICENSE"><img src="https://img.shields.io/github/license/zellkernel/shodan-fetch?style=flat-square" alt="license"></a>
+  <a href="https://github.com/sshpie/shodan-fetch/blob/main/LICENSE"><img src="https://img.shields.io/github/license/sshpie/shodan-fetch?style=flat-square" alt="license"></a>
   <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square&logo=python" alt="python"></a>
   <a href="https://playwright.dev"><img src="https://img.shields.io/badge/playwright-chromium-45ba4b?style=flat-square&logo=playwright" alt="playwright"></a>
-  <a href="https://zellkernel.com"><img src="https://img.shields.io/badge/by--blue?style=flat-square" alt=""></a>
+  <a href="https://sshpie.com"><img src="https://img.shields.io/badge/by--blue?style=flat-square" alt=""></a>
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@ A batch of queries returns full host records in about 1 to 1.5 seconds, authenti
 # Installation
 
 ```bash
-git clone https://github.com/zellkernel/shodan-fetch
+git clone https://github.com/sshpie/shodan-fetch
 cd shodan-fetch
 pip install -r requirements.txt
 playwright install chromium
@@ -162,12 +162,12 @@ shodan-fetch reads the Shodan web UI through your own authenticated session. It 
 
 # Our other projects
 
-- [JAXEN](https://github.com/zellkernel/JAXEN) — stateful Shodan harvest platform, integrates shodan-fetch natively via `jaxen hunt --web`
-- [aimap](https://github.com/zellkernel/aimap) — AI/ML infrastructure fingerprint scanner
-- [scanner](https://github.com/zellkernel/scanner) — active TCP+TLS banner stage between passive discovery and aimap
-- [recongraph](https://github.com/zellkernel/recongraph) — typed provenance graph for multi-source recon
-- [VisorLog](https://github.com/zellkernel/visorlog) — finding ledger and ingest pipeline
+- [JAXEN](https://github.com/sshpie/JAXEN) — stateful Shodan harvest platform, integrates shodan-fetch natively via `jaxen hunt --web`
+- [aimap](https://github.com/sshpie/aimap) — AI/ML infrastructure fingerprint scanner
+- [scanner](https://github.com/sshpie/scanner) — active TCP+TLS banner stage between passive discovery and aimap
+- [recongraph](https://github.com/sshpie/recongraph) — typed provenance graph for multi-source recon
+- [VisorLog](https://github.com/sshpie/visorlog) — finding ledger and ingest pipeline
 
 # License
 
-MIT. Part of the  toolchain. Contact: [zellkernel.com](https://zellkernel.com)
+MIT. Part of the  toolchain. Contact: [sshpie.com](https://sshpie.com)
