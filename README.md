@@ -6,7 +6,7 @@
   <a href="https://github.com/zellkernel/shodan-fetch/blob/main/LICENSE"><img src="https://img.shields.io/github/license/zellkernel/shodan-fetch?style=flat-square" alt="license"></a>
   <a href="https://www.python.org"><img src="https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square&logo=python" alt="python"></a>
   <a href="https://playwright.dev"><img src="https://img.shields.io/badge/playwright-chromium-45ba4b?style=flat-square&logo=playwright" alt="playwright"></a>
-  <a href="https://zellkernel.com"><img src="https://img.shields.io/badge/by-NuClide-blue?style=flat-square" alt="NuClide"></a>
+  <a href="https://zellkernel.com"><img src="https://img.shields.io/badge/by--blue?style=flat-square" alt=""></a>
 </p>
 
 <p align="center">
@@ -170,4 +170,4 @@ shodan-fetch reads the Shodan web UI through your own authenticated session. It 
 
 # License
 
-MIT. Part of the NuClide toolchain. Contact: [zellkernel.com](https://zellkernel.com)
+MIT. Part of the  toolchain. Contact: [zellkernel.com](https://zellkernel.com)
